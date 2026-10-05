@@ -34,9 +34,9 @@ const io = new Server(server, {
 const rooms = new Map();
 
 app.disable('x-powered-by');
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
+app.use(express.static(__dirname, { extensions: ['html'] }));
 app.get('/health', (_req, res) => res.json({ ok: true, service: 'serpiente-zen', rooms: rooms.size }));
-app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('*', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 function cleanName(value) {
   const cleaned = String(value || '')
