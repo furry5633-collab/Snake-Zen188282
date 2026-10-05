@@ -1,18 +1,17 @@
-# Snake Zen · multijugador cooperativo
+# Snake Zen — multijugador cooperativo
 
-Juego de Snake para dos personas, con salas privadas por código y modo Zen como modo predeterminado. El servidor es autoritativo: calcula movimientos, manzanas, colisiones, reconexiones y el final de la partida.
+Snake para dos personas con salas privadas por código. El modo Zen es el modo predeterminado: comed manzanas, atravesad los bordes y llenad el tablero en equipo. Si una serpiente choca, pierde la ronda.
 
-## Incluye
+## Qué incluye
 
-- Crear una sala privada y compartir un código de seis caracteres, o unirse con ese código.
-- Partidas cooperativas para dos. Cada serpiente crece al comer; si una choca, la ronda termina. Si llenáis todas las casillas, ganáis en equipo.
-- Las paredes conectan: se sale por un borde y se reaparece por el opuesto.
-- Controles con flechas o WASD, más cruceta táctil en móvil.
-- Pausa breve y reanudación si alguien pierde la conexión; el servidor conserva la sala durante la ventana de reconexión.
-- Tienda cosmética: se gana una semilla por cada manzana y se desbloquean skins. Semillas y skins se guardan en el navegador de cada jugador.
-- Revancha en la misma sala mientras sigan conectados los dos jugadores.
+- Menú sencillo con **Jugar**, **Tienda** y **Cómo se juega**.
+- En **Jugar**: crear una sala o unirse con un código de seis caracteres.
+- Sala de espera con nombres, código para compartir y botón para empezar.
+- Tablero y controles táctiles separados en móvil; teclado con flechas o WASD en ordenador.
+- Actualizaciones en tiempo real con Socket.IO y reanudación breve si alguien pierde la conexión.
+- Tienda cosmética: una semilla por manzana; las semillas se guardan en ese dispositivo.
 
-## Ejecutar en local
+## Probar en local
 
 Requiere Node.js 20 o posterior.
 
@@ -21,59 +20,20 @@ npm install
 npm start
 ```
 
-Abre `http://localhost:3000` en dos ventanas o dispositivos. Una persona crea la sala y comparte el código con la otra.
+Abre `http://localhost:3000` en dos navegadores. Una persona crea la sala y la otra introduce su código. El servidor también responde en `/health`.
 
-## Publicar en Render
+## Publicar en Render con GitHub
 
-Render no despliega un servidor Node subiendo un ZIP directamente: el Web Service normal se conecta a un repositorio Git, o puedes construir un contenedor Docker y publicar la imagen en un registro. Elige una de estas rutas:
+1. Sube los archivos de este proyecto a la raíz de un repositorio de GitHub.
+2. En Render, elige **New → Blueprint**, conecta el repositorio y confirma.
+3. Render usará `render.yaml`: instalará con `npm install` y arrancará con `npm start`.
+4. Cuando el servicio indique **Live**, abre su dirección `.onrender.com` y comparte esa dirección con tu compañero.
 
-### Sin GitHub: publicar una imagen Docker
+Los archivos del juego (`index.html`, `app.js` y `styles.css`) pueden estar en la raíz o dentro de `public/`; el servidor detecta ambas formas. Así se evita el error de pantalla blanca si la subida deja los archivos en la raíz.
 
-El proyecto incluye `Dockerfile` y `.dockerignore`. Esta ruta no necesita GitHub, pero sí Docker y un registro de imágenes como Docker Hub.
+## Notas importantes
 
-1. Descarga y descomprime el ZIP del proyecto; instala Docker Desktop y crea/inicia sesión en Docker Hub.
-2. En la carpeta del proyecto, abre una terminal e inicia sesión:
-
-   ```bash
-   docker login
-   ```
-
-3. Sustituye `TU_USUARIO` por tu usuario de Docker Hub y crea/sube la imagen para Linux AMD64:
-
-   ```bash
-   docker buildx build --platform linux/amd64 -t TU_USUARIO/snake-zen:1.0 --push .
-   ```
-
-   En Docker Hub, deja el repositorio como **Public** para que Render pueda descargarlo sin credenciales.
-
-4. En Render, pulsa **New → Web Service**. En **Source Code**, elige **Existing Image** y conecta `docker.io/TU_USUARIO/snake-zen:1.0`.
-5. Elige el plan y región; en **Advanced**, pon `/health` como **Health Check Path**. Pulsa **Deploy Web Service**.
-6. Al terminar, abre la URL HTTPS de Render. El servidor lee el puerto que Render inyecta automáticamente y Socket.IO funciona en el mismo dominio.
-
-Para una actualización, vuelve a crear/subir una etiqueta de imagen nueva y lanza un deploy de esa imagen desde Render.
-
-### Con Git (Blueprint)
-
-El proyecto incluye `render.yaml` como configuración de Blueprint. Render admite repositorios conectados de GitHub, GitLab, Bitbucket y Cursor Origin; si no quieres GitHub, puedes usar otro proveedor compatible.
-
-1. Sube el proyecto a un repositorio de un proveedor admitido.
-2. En Render, elige **New → Blueprint** y conecta el repositorio.
-3. Revisa el servicio `snake-zen` y confirma el despliegue. Render instalará dependencias con `npm install` y arrancará con `npm start`.
-
-También puedes crear un **Web Service** manualmente con runtime Node, `npm install` como Build Command y `npm start` como Start Command. `/health` sirve como comprobación de salud.
-
-### Notas de despliegue
-
-- Las salas y partidas viven en la memoria del proceso. Un reinicio o redeploy cierra las salas activas; esto mantiene el proyecto sencillo y no requiere base de datos.
-- Para este diseño, usa una sola instancia del servidor. Si más adelante escalas a varias instancias, habrá que añadir un adaptador compartido de Socket.IO (por ejemplo, Redis) y estado compartido de salas.
-- En el plan gratuito de Render el servicio puede suspenderse cuando está inactivo; una partida activa depende de que la instancia siga ejecutándose. Para disponibilidad continua, elige un plan siempre activo.
-- La moneda y las skins son cosméticas y se guardan localmente en el dispositivo, no en una cuenta del servidor.
-
-## Comprobaciones rápidas
-
-```bash
-npm run check
-curl http://localhost:3000/health
-```
-
-Después, prueba en dos navegadores: crear sala, unirse con el código, iniciar, girar en ambos lados, atravesar los bordes, comer manzanas, chocar y probar la reconexión/revancha.
+- Las salas viven en la memoria del servidor. Un reinicio o redeploy cierra las partidas activas.
+- Render Free puede dormir cuando no se usa; la primera carga después de un rato puede tardar bastante.
+- Mantén una sola instancia. Para escalar a varias hacen falta estado compartido y un adaptador Socket.IO.
+- Tienda, semillas y skins son locales al navegador; no hace falta crear cuentas.
