@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f5f6ee">
+  <meta name="description" content="Snake Zen: un juego cooperativo online para dos. Crea una sala, invita a alguien y llenad el tablero juntos.">
+  <title>Snake Zen — dos serpientes, un jardín</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Snake Zen, inicio" id="brandHome">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 42 42" fill="none">
+            <path d="M8 24.5c0-6.35 4.4-10.75 10.55-10.75h4.8c5.1 0 8.4 3.05 8.4 7.35 0 3.65-2.65 6.2-6.55 6.2H17.6c-3.75 0-6.1 2.05-6.1 5.05 0 2.85 2.25 4.7 5.35 4.7h6.4" stroke="currentColor" stroke-width="5.1" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="28" cy="20.7" r="1.55" fill="currentColor"/>
+            <path d="M16 13.7v-3.2" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="brand-word">snake<span>zen</span></span>
+      </a>
+
+      <div class="topbar-right">
+        <div class="connection-chip" id="connectionChip" aria-live="polite">
+          <span class="connection-dot"></span>
+          <span id="connectionLabel">Conectando</span>
+        </div>
+        <button class="seed-wallet" id="openShop" type="button" aria-label="Abrir tienda de skins">
+          <span class="seed-icon" aria-hidden="true">✦</span>
+          <span class="wallet-count" id="seedCount">0</span>
+          <span class="wallet-label">semillas</span>
+          <span class="wallet-divider"></span>
+          <span class="wallet-shop">Tienda</span>
+        </button>
+      </div>
+    </header>
+
+    <main>
+      <section class="view home-view" id="homeView">
+        <div class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-leaf">✳</span> COOPERATIVO ONLINE · MODO ZEN</div>
+            <h1>El jardín<br><span>es vuestro.</span></h1>
+            <p class="hero-subtitle">Dos serpientes, un mismo objetivo: comer manzanas y llenar el tablero. Las paredes son portales; chocar significa perder.</p>
+            <div class="hero-notes">
+              <span><i class="note-check">✓</i> Sin cronómetro</span>
+              <span><i class="note-check">✓</i> Hasta el último cuadro</span>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-sun"></div>
+            <div class="art-sticker sticker-top">+1 <span>🍎</span></div>
+            <div class="art-sticker sticker-bottom">ZEN MODE <span>✦</span></div>
+            <div class="art-board">
+              <div class="art-grid"></div>
+              <div class="art-snake art-snake-one">
+                <i></i><i></i><i></i><i></i><b>◦</b>
+              </div>
+              <div class="art-snake art-snake-two">
+                <i></i><i></i><i></i><b>◦</b>
+              </div>
+              <span class="art-apple">🍎</span>
+              <span class="art-sparkle sparkle-one">✳</span>
+              <span class="art-sparkle sparkle-two">✦</span>
+            </div>
+            <div class="art-caption"><span class="caption-dot"></span> Un pequeño jardín compartido</div>
+          </div>
+        </div>
+
+        <section class="play-section" aria-labelledby="playTitle">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">VAMOS A JUGAR</span>
+              <h2 id="playTitle">¿Cómo os juntáis?</h2>
+            </div>
+            <p>Una persona crea la sala. La otra entra con el código.</p>
+          </div>
+
+          <div class="setup-strip">
+            <label class="name-field" for="playerName">
+              <span>VUESTRO NOMBRE</span>
+              <input id="playerName" maxlength="18" autocomplete="nickname" placeholder="Ej. Manzanita" value="">
+            </label>
+            <div class="create-card">
+              <div class="action-icon create-icon" aria-hidden="true">＋</div>
+              <div class="action-copy">
+                <h3>Crea un grupo</h3>
+                <p>Te damos un código para compartir con tu amigo.</p>
+              </div>
+              <button class="button button-dark" id="createRoom" type="button">
+                Crear sala <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <form class="join-card" id="joinForm">
+              <div class="action-icon join-icon" aria-hidden="true">⌁</div>
+              <div class="action-copy">
+                <h3>Únete a un grupo</h3>
+                <p>Escribe el código de seis letras.</p>
+              </div>
+              <div class="join-control">
+                <label class="sr-only" for="roomCodeInput">Código de sala</label>
+                <input id="roomCodeInput" class="room-code-input" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="CÓDIGO" aria-label="Código de sala de seis caracteres">
+                <button class="button button-green join-submit" type="submit" aria-label="Unirme a la sala">Unirme <span aria-hidden="true">→</span></button>
+              </div>
+            </form>
+          </div>
+          <p class="privacy-note"><span aria-hidden="true">✦</span> Sin cuentas y sin matchmaking: jugáis en vuestra sala privada.</p>
+        </section>
+
+        <section class="how-section" aria-labelledby="howTitle">
+          <div class="how-title">
+            <span class="section-kicker">ASÍ DE FÁCIL</span>
+            <h2 id="howTitle">Un plan muy sencillo.</h2>
+          </div>
+          <div class="steps-grid">
+            <article class="step-card">
+              <span class="step-number">01</span>
+              <span class="step-emoji" aria-hidden="true">🔐</span>
+              <h3>Creáis una sala</h3>
+              <p>Compartid vuestro código privado. Solo caben dos.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">02</span>
+              <span class="step-emoji" aria-hidden="true">🍎</span>
+              <h3>Coméis en equipo</h3>
+              <p>Cada manzana hace crecer a quien la alcanza.</p>
+            </article>
+            <article class="step-card">
+              <span class="step-number">03</span>
+              <span class="step-emoji" aria-hidden="true">🌱</span>
+              <h3>Llenáis el jardín</h3>
+              <p>Envolved el tablero sin tocar ninguna serpiente.</p>
+            </article>
+          </div>
+        </section>
+
+        <footer class="site-footer">
+          <span class="footer-mark">snake<span>zen</span></span>
+          <span>Hecho para jugar sin prisa <b>·</b> Una sala, dos jugadores</span>
+        </footer>
+      </section>
+
+      <section class="view room-view" id="roomView" hidden>
+        <div class="subnav">
+          <button class="text-button" id="roomBack" type="button"><span aria-hidden="true">←</span> Salir</button>
+          <div class="subnav-label"><span class="live-pip"></span> SALA PRIVADA</div>
+        </div>
+        <div class="room-intro">
+          <div>
+            <span class="section-kicker">EL JARDÍN OS ESPERA</span>
+            <h1>La pandilla <span>zen.</span></h1>
+            <p>Invita a una persona y preparad vuestros mandos.</p>
+          </div>
+          <div class="zen-stamp"><span>✳</span><b>MODO</b><strong>ZEN</strong></div>
+        </div>
+
+        <div class="room-layout">
+          <section class="room-card room-main-card">
+            <div class="room-card-top">
+              <div>
+                <span class="section-kicker">CÓDIGO DE INVITACIÓN</span>
+                <p>Enviadlo a la otra persona para entrar.</p>
+              </div>
+              <span class="private-tag"><span>●</span> SOLO 2 JUGADORES</span>
+            </div>
+            <div class="share-code-row">
+              <div class="big-code" id="roomCodeDisplay" aria-label="Código de sala">------</div>
+              <button class="button button-soft copy-button" id="copyCode" type="button"><span aria-hidden="true">▣</span> Copiar</button>
+            </div>
+            <div class="divider"></div>
+            <div class="player-list-head"><span>JUGADORES</span><span id="playerCountLabel">1 DE 2</span></div>
+            <div class="player-slots" id="playerSlots"></div>
+            <div class="room-hint" id="roomHint"><span class="hint-icon">✦</span><span>Cuando llegue tu amigo, podréis empezar la partida juntos.</span></div>
+          </section>
+
+          <aside class="room-side-card">
+            <div class="room-side-leaf" aria-hidden="true">✳</div>
+            <span class="section-kicker">REGLAS DEL JARDÍN</span>
+            <h2>Calma, coordinación y manzanas.</h2>
+            <ul class="rule-list">
+              <li><span>↔</span><div><b>Las paredes conectan</b><small>Sales por un lado y apareces por el otro.</small></div></li>
+              <li><span>⤴</span><div><b>Un choque termina la partida</b><small>Cuidad vuestras colas y las del otro.</small></div></li>
+              <li><span>▦</span><div><b>Ganáis al llenar el tablero</b><small>Cooperad para ocupar cada casilla.</small></div></li>
+            </ul>
+            <button class="button button-lime start-button" id="startGame" type="button" disabled>Esperando al segundo jugador <span aria-hidden="true">→</span></button>
+            <p class="host-note" id="hostNote">Al crear la sala, tú eres quien puede iniciar la partida.</p>
+          </aside>
+        </div>
+        <footer class="site-footer room-footer"><span class="footer-mark">snake<span>zen</span></span><span>Un paso a la vez. No hay prisa.</span></footer>
+      </section>
+
+      <section class="view game-view" id="gameView" hidden>
+        <div class="game-toolbar">
+          <button class="text-button" id="gameLeave" type="button"><span aria-hidden="true">←</span> Salir de la sala</button>
+          <div class="game-room-code"><span class="live-pip"></span> SALA <b id="gameRoomCode">------</b></div>
+          <div class="zen-live-badge"><span>✳</span> MODO ZEN</div>
+        </div>
+
+        <div class="game-layout">
+          <div class="board-column">
+            <div class="scoreboard" id="scoreboard"></div>
+            <div class="board-frame">
+              <div class="board-topline"><span><i></i> JARDÍN COMPARTIDO</span><span id="boardStatus">A COMER MANZANAS</span></div>
+              <div class="canvas-wrap">
+                <canvas id="gameCanvas" width="880" height="640" aria-label="Tablero de Snake Zen"></canvas>
+                <div class="game-overlay" id="gameOverlay" hidden></div>
+              </div>
+            </div>
+            <div class="mobile-controls" aria-label="Controles táctiles">
+              <button type="button" data-direction="up" aria-label="Arriba">↑</button>
+              <div class="mobile-controls-row">
+                <button type="button" data-direction="left" aria-label="Izquierda">←</button>
+                <button type="button" data-direction="down" aria-label="Abajo">↓</button>
+                <button type="button" data-direction="right" aria-label="Derecha">→</button>
+              </div>
+            </div>
+          </div>
+
+          <aside class="game-sidebar">
+            <section class="progress-card">
+              <div class="progress-head"><span class="section-kicker">OBJETIVO EN EQUIPO</span><span class="progress-spark">✦</span></div>
+              <h2>Que no quede<br>ni un huequito.</h2>
+              <div class="progress-meta"><span>Tablero ocupado</span><b id="fillPercent">2%</b></div>
+              <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+              <div class="progress-foot"><span id="occupiedCount">6</span><span id="boardCellCount">/ 352 casillas</span></div>
+            </section>
+
+            <section class="controls-card">
+              <span class="section-kicker">TUS CONTROLES</span>
+              <h3>Elige un giro.</h3>
+              <div class="key-hint"><span class="key-group"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd></span><span>Flechas</span></div>
+              <div class="key-hint"><span class="wasd-keys"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>o WASD</span></div>
+              <p>Tu serpiente da un paso automáticamente. Puedes girar en cualquier momento.</p>
+            </section>
+
+            <div class="zen-reminder"><span>✳</span><p><b>Las paredes son portales.</b><br>Al otro lado del borde, sigues tu camino.</p></div>
+          </aside>
+        </div>
+        <footer class="site-footer game-footer"><span class="footer-mark">snake<span>zen</span></span><span>Coordinaos, pero no os crucéis.</span></footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="shopModal" hidden>
+    <section class="shop-modal" role="dialog" aria-modal="true" aria-labelledby="shopTitle">
+      <div class="modal-header">
+        <div>
+          <span class="section-kicker">UN TOQUE DE COLOR</span>
+          <h2 id="shopTitle">Tienda de skins</h2>
+          <p>Una semilla por cada manzana que comas.</p>
+        </div>
+        <button class="modal-close" id="closeShop" type="button" aria-label="Cerrar tienda">×</button>
+      </div>
+      <div class="shop-wallet"><span class="seed-icon" aria-hidden="true">✦</span><b id="shopSeedCount">0</b><span>semillas disponibles</span></div>
+      <div class="skin-grid" id="skinGrid"></div>
+      <p class="shop-footnote">Tus semillas y skins se guardan en este dispositivo.</p>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>
