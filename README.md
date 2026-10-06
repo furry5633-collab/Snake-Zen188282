@@ -1,17 +1,17 @@
-# Snake Zen — cooperativo para hasta 4 personas
+# Snake Zen v5
 
-Juego de serpientes en equipo con salas privadas por código. En el lobby se puede esperar hasta 4 participantes o **Empezar solo**. Todas las personas comparten el mismo marcador: cada manzana suma un punto común. Las paredes conectan; si una serpiente choca, termina la ronda para el equipo.
+Snake Zen cooperativo online para hasta **seis personas**, con modo solitario, salas por código, controles móviles y tablero vertical. Las manzanas suman un marcador compartido; los bordes conectan y un choque termina la ronda.
 
-## Incluye
+## Novedades
 
-- Menú de juego con **Jugar**, **Tienda** y **Cómo se juega**.
-- Crear sala o unirse con un código de seis caracteres; hasta 4 personas.
-- Empezar una partida con el grupo que haya o jugar en modo solitario.
-- Tablero vertical más grande en móvil, a pantalla completa; controles táctiles grandes y separados debajo del tablero, sin desplazamiento accidental.
-- Flechas/WASD en ordenador, WebSocket prioritario y reconexión breve.
-- Una semilla para quien come cada manzana; las skins y semillas son cosméticas y locales al navegador.
+- Cuentas con correo y contraseña; perfil con nombre y skin.
+- Solicitudes de amistad, avisos e invitaciones a salas.
+- Clasificación persistente con un récord independiente por cada equipo y por partida solitaria.
+- Al acabar una ronda se guarda el resultado en el perfil y se actualiza el récord solo si mejora.
+- **12 skins**. Con sesión iniciada, nombre, skin, semillas y desbloqueos se sincronizan entre dispositivos.
+- Los iconos de jugadores abren su perfil con estadísticas e historial.
 
-## Probar en local
+## Probar el juego
 
 Requiere Node.js 20 o posterior.
 
@@ -20,19 +20,28 @@ npm install
 npm start
 ```
 
-Abre `http://localhost:3000` en varios navegadores. El primero crea la sala; los demás escriben el código. Para probar el modo solitario, crea una sala y pulsa **Empezar solo**. `/health` comprueba que el servidor está encendido.
+Abre `http://localhost:3000`. Si no se configura Supabase, el juego sigue funcionando como invitado; las cuentas, amistades y récords compartidos muestran que necesitan configuración.
 
-## Publicar en Render con GitHub
+## Activar cuentas y datos compartidos con Supabase
 
-1. Sube los archivos del ZIP a la raíz del repositorio de GitHub.
-2. En Render, elige **New → Blueprint**, conecta el repositorio y confirma.
-3. Render usará `render.yaml`, instalará con `npm install` y arrancará con `npm start`.
-4. Cuando el servicio indique **Live**, comparte la dirección `.onrender.com`.
+1. Crea un proyecto gratuito en Supabase.
+2. Abre **SQL Editor** y ejecuta todo el archivo `supabase/setup.sql`.
+3. En **Project Settings → API**, copia la URL del proyecto y la clave **anon/public**.
+4. En local, crea `.env` a partir de `.env.example` y rellena `SUPABASE_URL` y `SUPABASE_ANON_KEY`.
+5. En Render, añade esas mismas variables en **Environment** y vuelve a desplegar. **No uses ni compartas `service_role`**: el juego no la necesita.
+6. En **Authentication → URL Configuration**, configura `Site URL` con la dirección pública del juego (y añade la dirección local si vas a probar en tu ordenador).
+7. En Authentication, revisa la opción de confirmación por correo. Si está activada, quien se registre debe confirmar el mensaje; al volver al juego, la sesión se abrirá automáticamente o podrá iniciar sesión.
 
-Los archivos del juego (`index.html`, `app.js` y `styles.css`) pueden estar en la raíz o dentro de `public/`; el servidor detecta ambas formas. No los metas en una carpeta adicional.
+La app solo entrega al navegador la clave pública `anon`; las tablas usan RLS y el SQL reserva la escritura de partidas para la función segura `record_game_result`. No subas tu `.env` a GitHub.
 
-## Notas
+### Plan gratuito
 
-- Las salas viven en la memoria del servidor. Un reinicio o redeploy cierra las partidas activas.
-- Render Free puede dormir cuando no se usa; la primera carga tras un rato puede tardar.
-- Mantén una sola instancia del servidor. Para escalar a varias hacen falta estado compartido y un adaptador Socket.IO.
+El plan gratuito de Supabase puede pausar proyectos tras una semana sin actividad. Si se pausa, se reanuda desde el panel de Supabase; no se pierden las partidas guardadas. Render Free también puede dormir cuando no se usa.
+
+## Publicar en Render
+
+1. Descomprime el ZIP y copia el contenido de `snake-zen-coop-v5/` a la raíz de un repositorio.
+2. En Render, crea un **Blueprint** con el repositorio y revisa `render.yaml`.
+3. Añade `SUPABASE_URL` y `SUPABASE_ANON_KEY` en **Environment** antes de usar cuentas; sin ellas funciona el modo invitado.
+
+Las salas activas viven en memoria y terminan si Render reinicia el servidor; las cuentas, amistades y récords quedan en Supabase. Mantén una sola instancia de este servidor. Los archivos del cliente (`index.html`, `app.js`, `social.js` y `styles.css`) pueden estar en la raíz o dentro de `public/`.
